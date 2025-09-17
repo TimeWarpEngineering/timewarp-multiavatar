@@ -25,19 +25,19 @@ File.WriteAllText("avatar.svg", svg);
 
 ## Command Line Tool
 
-Install the TimeWarp.Amuru.Tool:
+Install the TimeWarp.Ganda.Tool:
 
 ```bash
-dotnet tool install --global TimeWarp.Amuru.Tool
+dotnet tool install --global TimeWarp.Ganda.Tool
 timewarp multiavatar "user@example.com" --output avatar.svg
 ```
 
 ## Standalone Executable
 
 ```bash
-./multiavatar "user@example.com" --output avatar.svg
-./multiavatar "username" --no-env
-./multiavatar "test" --output-hash
+multiavatar "user@example.com" --output avatar.svg
+multiavatar "username" --no-env
+multiavatar "test" --output-hash
 ```
 
 ---
