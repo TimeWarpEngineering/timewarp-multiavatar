@@ -2,6 +2,8 @@
 
 A .NET port of [Multiavatar](https://github.com/multiavatar/Multiavatar) by [Gie Katon](https://github.com/giekaton).
 
+We make no claim to Multiavatar in any way. See the Multiavatar license here: https://multiavatar.com/license
+
 ## .NET Installation
 
 ```bash
