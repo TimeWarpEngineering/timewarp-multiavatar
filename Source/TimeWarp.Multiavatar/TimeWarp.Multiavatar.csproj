@@ -13,10 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TimeWarp.Nuru" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Data\**\*.json" />
   </ItemGroup>
 
