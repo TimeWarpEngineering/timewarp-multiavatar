@@ -23,7 +23,7 @@ public static class MultiavatarGenerator
         
         // Determine avatar type from the env part
         string envPartSelection = parts["env"];  // e.g. "07C"
-        string avatarType = envPartSelection.Substring(0, 2);  // e.g. "07"
+        string avatarType = envPartSelection[..2];  // e.g. "07"
         
         Error.WriteLine($"DEBUG: Avatar type={avatarType} from env={envPartSelection}");
         
