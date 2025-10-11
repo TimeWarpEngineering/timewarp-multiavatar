@@ -20,7 +20,10 @@ jobs:
         dotnet-quality: 'preview'
 
     - name: Extract version from tag
-      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/}
+        VERSION=${VERSION#v}
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Restore dependencies
       run: dotnet restore
