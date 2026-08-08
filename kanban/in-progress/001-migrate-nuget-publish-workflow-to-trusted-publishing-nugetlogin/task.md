@@ -82,3 +82,82 @@ Created from the timewarp-nuru 458-009 rollout session (2026-08-08).
 - Orchestrator: grok (2026-08-08)
 - Plan: finalized migrate release.yml only + release:published + nuget/login
 - Implementation: grok (2026-08-08)
+- Review: grok Phase 4b effort-1 (2026-08-08) — disposition clean
+
+## Results
+
+### What was implemented
+Migrated `.github/workflows/release.yml` from long-lived `secrets.NUGET_API_KEY` to NuGet Trusted Publishing via OIDC (`nuget/login@v1`).
+
+- Job permissions: `contents: read`, `id-token: write`
+- Primary trigger: `release: types: [published]` (removed any-tag push)
+- Break-glass: `workflow_dispatch` with `mode` dry|release and `confirm=release` guard
+- Version: `github.event.release.tag_name` on release events; `Directory.Build.props` `<Version>` on dispatch
+- Auth: `nuget/login@v1` user `TimeWarp.Enterprises`; push uses `steps.nuget-login.outputs.NUGET_API_KEY` only
+- Login and push share the same publish `if:` condition (dry dispatch packs only)
+
+### Files changed
+| File | Change |
+|------|--------|
+| `.github/workflows/release.yml` | OIDC trusted-publishing migration + trigger/version gates |
+| `kanban/.../001-.../task.md` | Plan, checklist, session, results |
+| `kanban/.../001-.../review/**` | Phase 4b framework, round-1 general+merged, disposition |
+
+### Key decisions / deviations
+- Migrated `release.yml` only — full 458 convention conversion deferred (WIP CI-only `workflow.yml` has no pack/push)
+- Kept filename `release.yml` (NuGet TP policy is name-sensitive)
+- No fallback to `secrets.NUGET_API_KEY`
+- No deviations from the locked plan
+
+### Test outcomes
+- Static grep: no `secrets.NUGET_*` under `.github/workflows/`
+- Phase 4b review: effort 1, roster `general`, 1 round, **0 open** (0 bug / 0 suggestion / 0 nit)
+- Disposition: **clean** — see `review/disposition.md`, `review/round-1/merged.md`
+
+### Residual operator work (not implementer)
+Checklist items still open by design (require live Actions + NuGet.org):
+1. E2E verify on next real GitHub Release publish
+2. After green: delete GitHub secret `NUGET_API_KEY` on this repo; revoke long-lived key only when safe (org-wide: nuru **458-009** if key is shared)
+
+### Phase 4b facts
+- Rounds: 1
+- Effort / roster: 1 / general
+- Final counts: all zero open
+- Outcome: clean
+- Paths: `review/review-framework.md`, `review/round-1/general.md`, `review/round-1/merged.md`, `review/disposition.md`
+
+### How to validate
+
+**Smoke (static, from repo root)**
+```bash
+# Expect: no stored NuGet secret references
+rg -n 'secrets\.(NUGET|PUBLISH)' .github/workflows/ || true
+# expect: no matches
+
+# Expect: OIDC login + id-token permission present
+rg -n 'nuget/login@v1|id-token: write|TimeWarp\.Enterprises' .github/workflows/release.yml
+# expect: all three patterns match
+
+# Expect: push uses login step output, not secrets
+rg -n 'steps\.nuget-login\.outputs\.NUGET_API_KEY|secrets\.NUGET' .github/workflows/release.yml
+# expect: steps.nuget-login line present; no secrets.NUGET line
+```
+
+**Smoke (Actions, after merge to default branch)**
+1. GitHub → Actions → **Release** → Run workflow → `mode=dry` → Run.
+   - **Expect:** restore/build/pack succeed; **NuGet login** and **Push to NuGet** steps skipped.
+2. Same, `mode=release`, leave `confirm` empty.
+   - **Expect:** fails at **Validate break-glass confirmation**; no push.
+
+**Automated gate**
+- None in-repo (OIDC cannot be unit-tested locally).
+
+**E2E (operator, next intended publish)**
+1. Confirm NuGet.org TP policy: repo `TimeWarpEngineering/timewarp-multiavatar`, workflow **`release.yml`**, owner `TimeWarp.Enterprises`.
+2. Publish a **GitHub Release** (tag = intended version; optional `v` prefix).
+3. **Expect:** job has OIDC permissions; NuGet login succeeds; `dotnet nuget push` succeeds; package on nuget.org.
+4. After green: delete repo secret `NUGET_API_KEY`; coordinate key revoke with nuru 458-009 if shared.
+
+**Depends on:** merge of this `release.yml` onto the branch GitHub uses for `release` events (repo default).
+
+**Not in scope:** full 458 reusable-workflow conversion; live E2E in the implementer session; org-wide key revocation before all secret-key publishers migrate.
