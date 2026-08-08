@@ -10,12 +10,13 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'Pipeline mode. merge = build and test only (default). dry = build and pack without publish. release = break-glass publish; also requires confirm.'
+        description: 'Pipeline mode. merge = build and test only (default). dry = build and pack without publish. release = break-glass publish; also requires confirm. probe = trusted-publishing check only (OIDC login, no build, no publish).'
         type: choice
         options:
           - merge
           - dry
           - release
+          - probe
         default: merge
       confirm:
         description: 'Break-glass guard: type the word release to confirm publishing when mode is release. Ignored otherwise.'
@@ -108,11 +109,16 @@ jobs:
     - name: NuGet login (OIDC Trusted Publishing)
       if: >-
         github.event_name == 'release' ||
-        (github.event_name == 'workflow_dispatch' && inputs.mode == 'release' && inputs.confirm == 'release')
+        (github.event_name == 'workflow_dispatch' && inputs.mode == 'release' && inputs.confirm == 'release') ||
+        (github.event_name == 'workflow_dispatch' && inputs.mode == 'probe')
       id: nuget-login
       uses: nuget/login@v1
       with:
         user: TimeWarp.Enterprises
+
+    - name: Trusted publishing probe result
+      if: github.event_name == 'workflow_dispatch' && inputs.mode == 'probe'
+      run: echo "Trusted publishing OK — OIDC exchange succeeded for this repo + workflow.yml."
 
     - name: Push to NuGet
       if: >-
