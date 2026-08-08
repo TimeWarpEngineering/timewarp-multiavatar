@@ -1,10 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- External packages -->
-    <PackageVersion Include="TimeWarp.Nuru" Version="2.1.0-beta.17" />
+    <PackageVersion Include="TimeWarp.Nuru" Version="3.0.0-beta.72" />
+    <PackageVersion Include="TimeWarp.Amuru" Version="1.0.0" />
+    <PackageVersion Include="TimeWarp.Amuru.Tools" Version="1.0.0-beta.2" />
+    <PackageVersion Include="TimeWarp.Terminal" Version="1.0.0" />
+    <PackageVersion Include="TimeWarp.Build.Tasks" Version="1.0.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="4.14.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
   </ItemGroup>
 </Project>
