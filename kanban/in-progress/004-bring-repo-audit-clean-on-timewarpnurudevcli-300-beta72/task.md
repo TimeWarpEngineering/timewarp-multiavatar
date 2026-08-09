@@ -70,3 +70,77 @@ This repo is a **partial / dual-structure** worktree, not a standard TimeWarp la
 - Tracked: `Directory.Packages.props` (Nuru 3.0.0-beta.72, Amuru 1.0.0, Terminal 1.0.0, Amuru.Tools), `Directory.Build.props` (msbuild/repository.props import)
 - Untracked scaffold left **uncommitted** intentionally (no large scaffolding)
 - Orchestration 2026-08-09 (grok): plan finalized; implementing layout + DevCli adoption.
+
+## Results
+
+### What was implemented
+- Kebab-case product layout: `source/timewarp-multiavatar/`, `assets/logo.png`, `timewarp-multiavatar.slnx`
+- Version SSOT moved to `source/Directory.Build.props` at **1.0.0-beta.13**; root props no longer set Version or RestorePackagesPath
+- Adopted **TimeWarp.Nuru.DevCli 3.0.0-beta.72** with DI registrations; package endpoints supply `release`, `check-version`, `clean`, `self-install`
+- LocalNuGetCache / PascalCase `Source`/`Assets` removed; scaffold (tools/dev-cli, msbuild, hooks, etc.) committed
+- Embedded resource matching updated for `data/` folder casing
+- GHA workflow Version grep points at `source/Directory.Build.props`
+- BannedApi: removed debug Console usage so product builds under org BannedSymbols
+
+### Files changed (high level)
+- Product tree under `source/timewarp-multiavatar/`
+- `Directory.Build.props`, `source/Directory.Build.props`, `Directory.Packages.props`
+- `tools/dev-cli/*`, `.github/workflows/workflow.yml`, `.gitignore`
+- Scaffold: `.envrc`, `.githooks/`, `.memsearch.toml`, `.timewarp/`, `BannedSymbols.txt`, `msbuild/`, `global.json`, etc.
+
+### Key decisions / deviations
+- PackageId/AssemblyName/RootNamespace remain **TimeWarp.Multiavatar** (PascalCase NuGet identity; kebab paths only)
+- Console debug removal required after committing BannedSymbols (not a workaround)
+- `dev check-version` may exit non-zero when version already published on NuGet; packable derivation is the bar
+
+### Test outcomes
+| Check | Result |
+|-------|--------|
+| `dotnet build timewarp-multiavatar.slnx -c Release` | PASS |
+| `dotnet run tools/dev-cli/dev.cs -- self-install` | PASS |
+| `./bin/dev --help` lists `release` | PASS |
+| `./bin/dev check-version` derives TimeWarp.Multiavatar | PASS (exit 1 if already published) |
+| `ganda repo audit` | PASS (22 pass / 0 fail) |
+
+### Phase 4b review
+- Effort 1, roster: general
+- Rounds: 1
+- Counts: 0 open / 0 fixed / 0 wontfix across bug/suggestion/nit
+- Disposition: **clean**
+- Paths: `review/review-framework.md`, `review/round-1/general.md`, `review/round-1/merged.md`, `review/disposition.md`
+
+### How to validate
+
+**Automated gate**
+```bash
+cd /home/steve/worktrees/github.com/TimeWarpEngineering/timewarp-multiavatar/dev
+dotnet build timewarp-multiavatar.slnx -c Release
+# expect: Build succeeded, 0 errors
+ganda repo audit
+# expect: Passed N | Failed: 0; "Repository passes all audit checks."
+```
+
+**Smoke**
+```bash
+dotnet run tools/dev-cli/dev.cs -- self-install   # or use existing ./bin/dev
+./bin/dev --help
+# expect: Commands table includes `release` and `check-version`
+./bin/dev check-version
+# expect: mentions packable package TimeWarp.Multiavatar
+# (exit may be 1 if 1.0.0-beta.13 already on NuGet — derivation still counts)
+grep -n '<Version>' Directory.Build.props source/Directory.Build.props
+# expect: Version only under source/Directory.Build.props (= 1.0.0-beta.13)
+test ! -d Source && test ! -d Assets && test ! -d LocalNuGetCache
+# expect: all three absent
+```
+
+**Expect**
+- Audit Failed: 0
+- `release` listed in `dev --help`
+- Packable project under `source/timewarp-multiavatar/` with PackageId TimeWarp.Multiavatar
+- Version SSOT only in `source/Directory.Build.props`
+
+**Not in scope**
+- Cutting a live NuGet release (`dev release` full path needs clean master + CI green)
+- Adding a full unit test suite or samples
+- Phase 4b review 2026-08-09 (grok): effort 1 general; disposition clean.
