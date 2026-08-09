@@ -78,7 +78,7 @@ jobs:
           VERSION="${{ github.event.release.tag_name }}"
         else
           # Break-glass / dry-run: use props SSOT (tag may not exist yet)
-          VERSION=$(grep -oP '(?<=<Version>)[^<]+' Directory.Build.props | head -1)
+          VERSION=$(grep -oP '(?<=<Version>)[^<]+' source/Directory.Build.props | head -1)
         fi
         VERSION="${VERSION#v}"
         if [ -z "$VERSION" ]; then

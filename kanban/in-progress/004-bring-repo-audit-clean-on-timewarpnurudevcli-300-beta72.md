@@ -12,10 +12,10 @@ trusted-publishing probe, derived package sets.
 
 - [x] `ganda repo audit --fix` (bumps TimeWarp.Nuru/DevCli to latest, fixes kebab/structure where fixable)
 - [x] Verify Directory.Packages.props pins TimeWarp.Nuru.DevCli (and TimeWarp.Nuru where referenced) at 3.0.0-beta.72
-- [ ] Build — NURU050 names any missing DI registration (e.g. `IPackableProjectService`); add per the DevCli readme migration notes (CS0101 local-CiMode note also applies)
+- [x] Build — NURU050 names any missing DI registration (e.g. `IPackableProjectService`); add per the DevCli readme migration notes (CS0101 local-CiMode note also applies)
 - [x] `dev self-install` (AOT binary is a snapshot; new commands like `release` are absent until reinstalled)
-- [ ] `ganda repo audit` → PASSES ALL CHECKS (if a check is structurally unfixable here, record it explicitly with a reason instead of forcing)
-- [ ] Smoke: `dev --help` shows `release`; `dev check-version` derives the packable set (publishers only)
+- [x] `ganda repo audit` → PASSES ALL CHECKS (if a check is structurally unfixable here, record it explicitly with a reason instead of forcing)
+- [x] Smoke: `dev --help` shows `release`; `dev check-version` derives the packable set (publishers only)
 - [x] Commit everything (audit fixes, props, dev.cs, kanban) — local commits fine; ride the repo's normal merge flow
 
 ## Notes
@@ -45,6 +45,7 @@ Template: timewarp-flexbox/dev + TimeWarp.Nuru.DevCli 3.0.0-beta.72. No further 
 
 ## Session
 
+- Implementation 2026-08-09 (grok build agent): layout kebab rename + DevCli 3.0.0-beta.72 + version SSOT. `ganda repo audit` Failed 0; `./bin/dev --help` lists `release`; packable under `source/`; Version only in `source/Directory.Build.props` at 1.0.0-beta.13. Commits: `refactor(layout): …`, `feat(dev-cli): …`. Left in-progress for orchestrator Results/done.
 - Assessment 2026-08-08 (grok): **left in-progress**. Safe fixes only.
 
 ### Assessment
