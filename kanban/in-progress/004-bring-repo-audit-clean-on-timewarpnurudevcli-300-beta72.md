@@ -24,6 +24,25 @@ Created 2026-08-08 from the nuru 458 program session. timewarp-nuru is the
 reference (audit-clean at beta.72, first release shipped through the full
 machinery).
 
+
+
+### Implementation plan (2026-08-09 orchestration)
+
+Template: timewarp-flexbox/dev + TimeWarp.Nuru.DevCli 3.0.0-beta.72. No further human decisions.
+
+**Steps**
+1. Remove `RestorePackagesPath` / clear `LocalNuGetCache` (kebab noise).
+2. Layout: `Source/TimeWarp.Multiavatar` → `source/timewarp-multiavatar` (kebab files/dirs); `Assets/Logo.png` → `assets/logo.png`; `TimeWarp.Multiavatar.slnx` → `timewarp-multiavatar.slnx`. Keep C# types/namespaces and PackageId `TimeWarp.Multiavatar`.
+3. Version SSOT: only `source/Directory.Build.props` at `1.0.0-beta.13`; root drops Version/package metadata; IsPackable false at root, true under source/.
+4. Fix embedded resource name matches after `Data` → `data` (ThemeService, PartTemplates).
+5. Pin `TimeWarp.Nuru.DevCli` 3.0.0-beta.72; wire tools/dev-cli PackageReference + flexbox DI (IRepoCleanService, NuGetVersionService, IRepoConfigService, IPackableProjectService).
+6. Delete local endpoints that collide: clean, check-version, self-install. Keep build/test/verify-samples/workflow. Delete tools/dev-cli/source scaffold.
+7. Fix GHA Version grep → `source/Directory.Build.props`.
+8. Build, self-install, smoke (`dev --help` has release; check-version derives packable), `ganda repo audit` exit 0.
+9. Commit layout + DevCli + kanban.
+
+**Success:** audit Failed 0; `./bin/dev --help` lists release; packable under source/; Version only in source/.
+
 ## Session
 
 - Assessment 2026-08-08 (grok): **left in-progress**. Safe fixes only.
@@ -49,3 +68,4 @@ This repo is a **partial / dual-structure** worktree, not a standard TimeWarp la
 ### Safe commits in this session
 - Tracked: `Directory.Packages.props` (Nuru 3.0.0-beta.72, Amuru 1.0.0, Terminal 1.0.0, Amuru.Tools), `Directory.Build.props` (msbuild/repository.props import)
 - Untracked scaffold left **uncommitted** intentionally (no large scaffolding)
+- Orchestration 2026-08-09 (grok): plan finalized; implementing layout + DevCli adoption.
