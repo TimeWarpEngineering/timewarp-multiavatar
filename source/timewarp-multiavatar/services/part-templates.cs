@@ -15,29 +15,29 @@ public static class PartTemplates
         Assembly assembly = typeof(PartTemplates).Assembly;
         string[] resourceNames = assembly.GetManifestResourceNames();
         
-        // Look for template resources: TimeWarp.Multiavatar.Data.svg-templates.*.json
+        // Look for template resources: TimeWarp.Multiavatar.data.svg-templates.*.json
         string[] templateResources = resourceNames.Where(name => 
-            name.Contains(".Data.svg-templates.", StringComparison.Ordinal) && 
+            name.Contains(".data.svg-templates.", StringComparison.Ordinal) && 
             name.EndsWith(".json", StringComparison.Ordinal)).ToArray();
         
         if (templateResources.Length == 0)
         {
             // Try alternate naming pattern (hyphen might be converted to underscore)
             templateResources = resourceNames.Where(name => 
-                name.Contains(".Data.svg_templates.", StringComparison.Ordinal) && 
+                name.Contains(".data.svg_templates.", StringComparison.Ordinal) && 
                 name.EndsWith(".json", StringComparison.Ordinal)).ToArray();
         }
         
         if (templateResources.Length == 0)
         {
             throw new InvalidOperationException(
-                $"No SVG template resources found. Ensure Data/svg-templates/*.json files are embedded as resources. Available resources: {string.Join(", ", resourceNames.Take(5))}...");
+                $"No SVG template resources found. Ensure data/svg-templates/*.json files are embedded as resources. Available resources: {string.Join(", ", resourceNames.Take(5))}...");
         }
         
         foreach (string resourceName in templateResources)
         {
             // Extract avatar type from resource name
-            // e.g., "TimeWarp.Multiavatar.Data.svg-templates.00-robo.json" -> "00"
+            // e.g., "TimeWarp.Multiavatar.data.svg-templates.00-robo.json" -> "00"
             string fileName = resourceName.Split('.').Last(item => item.Contains('-', StringComparison.Ordinal));
             string avatarType = fileName.Split('-')[0];
             

@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/source/">
+    <Project Path="source/timewarp-multiavatar/timewarp-multiavatar.csproj" />
+  </Folder>
+</Solution>

@@ -25,8 +25,6 @@ public static class MultiavatarGenerator
         string envPartSelection = parts["env"];  // e.g. "07C"
         string avatarType = envPartSelection[..2];  // e.g. "07"
         
-        Error.WriteLine($"DEBUG: Avatar type={avatarType} from env={envPartSelection}");
-        
         // Get the final SVG for each part
         var final = new Dictionary<string, string>();
         
@@ -55,7 +53,6 @@ public static class MultiavatarGenerator
                 }
             }
             
-            Error.WriteLine($"  Part {part.Key}: partNumber={finalPartNumber}, theme={finalThemeVariant}");
             final[part.Key] = GetFinalSvg(part.Key, finalPartNumber, finalThemeVariant);
         }
         

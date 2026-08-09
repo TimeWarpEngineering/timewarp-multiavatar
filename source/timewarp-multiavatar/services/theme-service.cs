@@ -15,21 +15,21 @@ public static class ThemeService
         Assembly assembly = typeof(ThemeService).Assembly;
         string[] resourceNames = assembly.GetManifestResourceNames();
         
-        // Look for theme resources: TimeWarp.Multiavatar.Data.themes.*.json
+        // Look for theme resources: TimeWarp.Multiavatar.data.themes.*.json
         string[] themeResources = resourceNames.Where(name => 
-            name.StartsWith("TimeWarp.Multiavatar.Data.themes.", StringComparison.Ordinal) && 
+            name.StartsWith("TimeWarp.Multiavatar.data.themes.", StringComparison.Ordinal) && 
             name.EndsWith(".json", StringComparison.Ordinal)).ToArray();
         
         if (themeResources.Length == 0)
         {
             throw new InvalidOperationException(
-                "No theme resources found. Ensure Data/themes/*.json files are embedded as resources.");
+                "No theme resources found. Ensure data/themes/*.json files are embedded as resources.");
         }
         
         foreach (string resourceName in themeResources)
         {
             // Extract theme number from resource name
-            // e.g., "TimeWarp.Multiavatar.Data.themes.00-robo.json" -> "00"
+            // e.g., "TimeWarp.Multiavatar.data.themes.00-robo.json" -> "00"
             string fileName = resourceName.Split('.').Last(item => item.Contains('-', StringComparison.Ordinal));
             string themeNumber = fileName.Split('-')[0];
             
@@ -70,7 +70,6 @@ public static class ThemeService
             throw new KeyNotFoundException($"Part '{partName}' not found in theme {themeNumber} variant {variant}. Available parts: {string.Join(", ", variantData.Keys)}");
         }
         
-        Error.WriteLine($"  Theme colors for {themeNumber}/{variant}/{partName}: [{string.Join(", ", colors.Select(c => $"\"{c}\""))}]");
         return colors;
     }
 }
