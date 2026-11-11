@@ -2,10 +2,6 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
   <PropertyGroup>
-    <!-- TimeWarp.Nuru 4.0.0-beta.12, Amuru 3, and Terminal 2 ship net11.0 only. Pin the TFM
-         so a runfile built by an older default SDK fails clearly instead of on package restore. -->
-    <TargetFramework>net11.0</TargetFramework>
-
     <!-- Suppress warnings that don't apply to CLI tools.
          RCS1194 is none in the root .editorconfig. DevCli content is compiled
          from the NuGet package, outside the repo, so that file does not apply. -->
