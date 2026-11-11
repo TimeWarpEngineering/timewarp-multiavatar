@@ -73,6 +73,7 @@ public static class ThemeService
             throw new KeyNotFoundException($"Part '{partName}' not found in theme {themeNumber} variant {variant}. Available parts: {string.Join(", ", variantData.Keys)}");
         }
         
+        global::TimeWarp.Terminal.Terminal.WriteErrorLine($"  Theme colors for {themeNumber}/{variant}/{partName}: [{string.Join(", ", colors.Select(c => $"\"{c}\""))}]");
         return colors;
     }
 }

@@ -19,6 +19,7 @@ public static partial class ColorReplacementService
             string fullMatch = matches[i].Value;  // e.g., "#01;"
             string replacement = colors[i] + ";";  // e.g., "#ff0000;"
             
+            global::TimeWarp.Terminal.Terminal.WriteErrorLine($"Replacing first occurrence of {fullMatch} -> {replacement}");
             
             // Find and replace the FIRST occurrence in the current string
             int index = resultFinal.IndexOf(fullMatch, StringComparison.Ordinal);

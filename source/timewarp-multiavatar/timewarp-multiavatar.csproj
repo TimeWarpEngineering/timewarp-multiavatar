@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="TimeWarp.Terminal" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- Package icon comes from source/Directory.Build.props -->
     <None Include="..\..\readme.md" Pack="true" PackagePath="" />
   </ItemGroup>

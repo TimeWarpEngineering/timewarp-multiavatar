@@ -25,6 +25,7 @@ public static class MultiavatarGenerator
         string envPartSelection = parts["env"];  // e.g. "07C"
         string avatarType = envPartSelection[..2];  // e.g. "07"
         
+        global::TimeWarp.Terminal.Terminal.WriteErrorLine($"DEBUG: Avatar type={avatarType} from env={envPartSelection}");
         
         // Get the final SVG for each part
         Dictionary<string, string> final = [];
@@ -54,6 +55,7 @@ public static class MultiavatarGenerator
                 }
             }
             
+            global::TimeWarp.Terminal.Terminal.WriteErrorLine($"  Part {part.Key}: partNumber={finalPartNumber}, theme={finalThemeVariant}");
             final[part.Key] = GetFinalSvg(part.Key, finalPartNumber, finalThemeVariant);
         }
         
