@@ -2,7 +2,7 @@ namespace TimeWarp.Multiavatar;
 
 public static class PartTemplates
 {
-    private static readonly Dictionary<string, Dictionary<string, string>> Templates = new();
+    private static readonly Dictionary<string, Dictionary<string, string>> Templates = [];
     
     static PartTemplates()
     {
@@ -15,17 +15,23 @@ public static class PartTemplates
         Assembly assembly = typeof(PartTemplates).Assembly;
         string[] resourceNames = assembly.GetManifestResourceNames();
         
-        // Look for template resources: TimeWarp.Multiavatar.Data.svg-templates.*.json
-        string[] templateResources = resourceNames.Where(name => 
-            name.Contains(".Data.svg-templates.", StringComparison.Ordinal) && 
-            name.EndsWith(".json", StringComparison.Ordinal)).ToArray();
+        // Look for template resources: TimeWarp.Multiavatar.data.svg-templates.*.json
+        string[] templateResources =
+        [
+            .. resourceNames.Where(name =>
+                name.Contains(".data.svg-templates.", StringComparison.Ordinal) &&
+                name.EndsWith(".json", StringComparison.Ordinal))
+        ];
         
         if (templateResources.Length == 0)
         {
             // Try alternate naming pattern (hyphen might be converted to underscore)
-            templateResources = resourceNames.Where(name => 
-                name.Contains(".Data.svg_templates.", StringComparison.Ordinal) && 
-                name.EndsWith(".json", StringComparison.Ordinal)).ToArray();
+            templateResources =
+            [
+                .. resourceNames.Where(name =>
+                    name.Contains(".data.svg_templates.", StringComparison.Ordinal) &&
+                    name.EndsWith(".json", StringComparison.Ordinal))
+            ];
         }
         
         if (templateResources.Length == 0)
@@ -37,7 +43,7 @@ public static class PartTemplates
         foreach (string resourceName in templateResources)
         {
             // Extract avatar type from resource name
-            // e.g., "TimeWarp.Multiavatar.Data.svg-templates.00-robo.json" -> "00"
+            // e.g., "TimeWarp.Multiavatar.data.svg-templates.00-robo.json" -> "00"
             string fileName = resourceName.Split('.').Last(item => item.Contains('-', StringComparison.Ordinal));
             string avatarType = fileName.Split('-')[0];
             
@@ -70,6 +76,6 @@ public static class PartTemplates
     
     public static Dictionary<string, string> GetAllParts(string avatarType)
     {
-        return Templates.TryGetValue(avatarType, out Dictionary<string, string>? parts) ? parts : new Dictionary<string, string>();
+        return Templates.TryGetValue(avatarType, out Dictionary<string, string>? parts) ? parts : [];
     }
 }

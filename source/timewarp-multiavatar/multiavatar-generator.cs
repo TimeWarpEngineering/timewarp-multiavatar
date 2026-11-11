@@ -11,7 +11,7 @@ public static class MultiavatarGenerator
         string hash = HashService.GenerateHash(input);
         
         // Get parts selection (range 0-47)
-        var parts = new Dictionary<string, string>
+        Dictionary<string, string> parts = new()
         {
             ["env"] = HashService.GetPartSelection(hash.Substring(0, 2)),
             ["clo"] = HashService.GetPartSelection(hash.Substring(2, 2)),
@@ -25,10 +25,9 @@ public static class MultiavatarGenerator
         string envPartSelection = parts["env"];  // e.g. "07C"
         string avatarType = envPartSelection[..2];  // e.g. "07"
         
-        Error.WriteLine($"DEBUG: Avatar type={avatarType} from env={envPartSelection}");
         
         // Get the final SVG for each part
-        var final = new Dictionary<string, string>();
+        Dictionary<string, string> final = [];
         
         foreach (KeyValuePair<string, string> part in parts)
         {
@@ -55,7 +54,6 @@ public static class MultiavatarGenerator
                 }
             }
             
-            Error.WriteLine($"  Part {part.Key}: partNumber={finalPartNumber}, theme={finalThemeVariant}");
             final[part.Key] = GetFinalSvg(part.Key, finalPartNumber, finalThemeVariant);
         }
         

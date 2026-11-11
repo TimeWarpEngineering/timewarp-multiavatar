@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageIcon>Logo.png</PackageIcon>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <AssemblyName>TimeWarp.Multiavatar</AssemblyName>
+    <RootNamespace>TimeWarp.Multiavatar</RootNamespace>
     
     <!-- NuGet Package Metadata -->
     <PackageId>TimeWarp.Multiavatar</PackageId>
@@ -13,13 +14,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Data\**\*.json" />
+    <EmbeddedResource Include="data\**\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Shared assets -->
-    <None Include="..\..\Assets\Logo.png" Pack="true" PackagePath="" />
-    <None Include="..\..\README.md" Pack="true" PackagePath="" />
+    <!-- Package icon comes from source/Directory.Build.props -->
+    <None Include="..\..\readme.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
