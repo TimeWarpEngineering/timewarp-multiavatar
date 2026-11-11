@@ -32,7 +32,8 @@ Fixed:
 - `<Version>` moved to source/Directory.Build.props; the workflow reads it there.
 - Workflow: `defaults.run.shell: pwsh`, `Resolve version` ported to PowerShell, `feature/**` added to pull_request branches.
 - Removed `RestorePackagesPath=LocalNuGetCache` from root props. The in-repo cache made the audit scan third-party .cs files (line cap, editorconfig).
-- Library analyzer fixes: removed stderr `DEBUG` traces (`Error.WriteLine`, banned Console), collection expressions, explicit types.
+- Library analyzer fixes: collection expressions, explicit types. The four stderr `DEBUG` traces were first dropped (`Error.WriteLine`, banned Console), then restored via `TimeWarp.Terminal.Terminal.WriteErrorLine` (fully qualified because `Terminal` resolves to the `TimeWarp.Terminal` namespace inside `TimeWarp.Multiavatar`).
+- Library retargeted net10.0 -> net11.0 (TimeWarp.Terminal 2.0.0-beta.1 ships net11.0 only). Removed the now-duplicate `.githooks/Directory.Build.props` and the dev-cli TFM override; CI `setup-dotnet` now `11.0.x`. Breaking for net10.0 consumers.
 - dev-cli: handlers made public, `ct` renamed `cancellationToken`, blank lines for IDE2003.
 
 Open:
