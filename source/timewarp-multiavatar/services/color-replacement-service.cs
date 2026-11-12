@@ -1,3 +1,11 @@
+#region Purpose
+// Replaces the colour placeholders (e.g. "#01;") in an SVG part template with the colours of the selected theme variant.
+#endregion
+
+#region Design
+// Mirrors the original JavaScript: for each placeholder match, in order, only the first occurrence of that matched text in the current string is replaced by the next colour.
+#endregion
+
 namespace TimeWarp.Multiavatar;
 
 public static partial class ColorReplacementService

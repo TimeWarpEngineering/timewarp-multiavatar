@@ -1,3 +1,11 @@
+#region Purpose
+// Public entry point that turns an input string into a Multiavatar SVG by hashing it, selecting the six parts, colouring them and composing the final SVG.
+#endregion
+
+#region Design
+// Parts are layered in the fixed order env, head, clo, top, eyes, mouth; sansEnv blanks the env layer. The optional ver dictionary overrides the part number and theme variant chosen from the hash.
+#endregion
+
 namespace TimeWarp.Multiavatar;
 
 public static class MultiavatarGenerator

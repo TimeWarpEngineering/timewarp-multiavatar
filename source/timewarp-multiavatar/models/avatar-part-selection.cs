@@ -1,3 +1,7 @@
+#region Purpose
+// Model that splits a three-character part selection (e.g. "07C") into its two-character part type and one-character theme variant.
+#endregion
+
 namespace TimeWarp.Multiavatar;
 
 public class AvatarPart

@@ -1,3 +1,11 @@
+#region Purpose
+// Loads the theme colour data from the embedded themes JSON resources and looks up colours by theme number, variant and part name.
+#endregion
+
+#region Design
+// The theme number is the numeric prefix of the resource file name (e.g. "00" from 00-robo.json). An unknown theme yields no colours, but a known theme missing the requested part throws KeyNotFoundException.
+#endregion
+
 namespace TimeWarp.Multiavatar;
 
 public static class ThemeService
