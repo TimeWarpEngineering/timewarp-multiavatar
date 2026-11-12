@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, 'feature/**']
   release:
     types: [published]
   workflow_dispatch:
@@ -23,6 +23,10 @@ on:
         type: string
         default: ''
 
+defaults:
+  run:
+    shell: pwsh
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -36,7 +40,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '10.0.x'
+        dotnet-version: '11.0.x'
         dotnet-quality: 'preview'
 
     - name: Validate break-glass confirmation
@@ -73,20 +77,22 @@ jobs:
         github.event_name == 'release' ||
         (github.event_name == 'workflow_dispatch' && (inputs.mode == 'release' || inputs.mode == 'dry'))
       run: |
-        set -euo pipefail
-        if [ "${{ github.event_name }}" = "release" ]; then
-          VERSION="${{ github.event.release.tag_name }}"
-        else
+        $ErrorActionPreference = 'Stop'
+        if ('${{ github.event_name }}' -eq 'release') {
+          $version = '${{ github.event.release.tag_name }}'
+        }
+        else {
           # Break-glass / dry-run: use props SSOT (tag may not exist yet)
-          VERSION=$(grep -oP '(?<=<Version>)[^<]+' Directory.Build.props | head -1)
-        fi
-        VERSION="${VERSION#v}"
-        if [ -z "$VERSION" ]; then
-          echo "::error::Could not resolve package version"
+          $match = Select-String -Path source/Directory.Build.props -Pattern '(?<=<Version>)[^<]+' | Select-Object -First 1
+          $version = if ($match) { $match.Matches[0].Value } else { '' }
+        }
+        if ($version.StartsWith('v')) { $version = $version.Substring(1) }
+        if ([string]::IsNullOrEmpty($version)) {
+          Write-Output "::error::Could not resolve package version"
           exit 1
-        fi
-        echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-        echo "Resolved VERSION=$VERSION"
+        }
+        "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+        Write-Output "Resolved VERSION=$version"
 
     - name: Restore dependencies (release)
       if: >-

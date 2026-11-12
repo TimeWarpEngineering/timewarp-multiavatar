@@ -2,7 +2,7 @@ namespace TimeWarp.Multiavatar;
 
 public static class ThemeService
 {
-    private static readonly Dictionary<string, Theme> Themes = new();
+    private static readonly Dictionary<string, Theme> Themes = [];
     
     static ThemeService()
     {
@@ -15,10 +15,13 @@ public static class ThemeService
         Assembly assembly = typeof(ThemeService).Assembly;
         string[] resourceNames = assembly.GetManifestResourceNames();
         
-        // Look for theme resources: TimeWarp.Multiavatar.Data.themes.*.json
-        string[] themeResources = resourceNames.Where(name => 
-            name.StartsWith("TimeWarp.Multiavatar.Data.themes.", StringComparison.Ordinal) && 
-            name.EndsWith(".json", StringComparison.Ordinal)).ToArray();
+        // Look for theme resources: TimeWarp.Multiavatar.data.themes.*.json
+        string[] themeResources =
+        [
+            .. resourceNames.Where(name =>
+                name.StartsWith("TimeWarp.Multiavatar.data.themes.", StringComparison.Ordinal) &&
+                name.EndsWith(".json", StringComparison.Ordinal))
+        ];
         
         if (themeResources.Length == 0)
         {
@@ -29,7 +32,7 @@ public static class ThemeService
         foreach (string resourceName in themeResources)
         {
             // Extract theme number from resource name
-            // e.g., "TimeWarp.Multiavatar.Data.themes.00-robo.json" -> "00"
+            // e.g., "TimeWarp.Multiavatar.data.themes.00-robo.json" -> "00"
             string fileName = resourceName.Split('.').Last(item => item.Contains('-', StringComparison.Ordinal));
             string themeNumber = fileName.Split('-')[0];
             
@@ -55,7 +58,7 @@ public static class ThemeService
     public static string[] GetThemeColors(string themeNumber, string variant, string partName)
     {
         Theme? theme = GetTheme(themeNumber);
-        if (theme == null) return Array.Empty<string>();
+        if (theme == null) return [];
         
         Dictionary<string, string[]> variantData = variant switch
         {
@@ -70,7 +73,7 @@ public static class ThemeService
             throw new KeyNotFoundException($"Part '{partName}' not found in theme {themeNumber} variant {variant}. Available parts: {string.Join(", ", variantData.Keys)}");
         }
         
-        Error.WriteLine($"  Theme colors for {themeNumber}/{variant}/{partName}: [{string.Join(", ", colors.Select(c => $"\"{c}\""))}]");
+        global::TimeWarp.Terminal.Terminal.WriteErrorLine($"  Theme colors for {themeNumber}/{variant}/{partName}: [{string.Join(", ", colors.Select(c => $"\"{c}\""))}]");
         return colors;
     }
 }
