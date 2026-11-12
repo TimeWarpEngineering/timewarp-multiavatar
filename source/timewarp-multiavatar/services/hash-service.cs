@@ -1,3 +1,11 @@
+#region Purpose
+// Derives the deterministic 12-digit numeric hash from an input string and maps two-digit slices of it to part selections.
+#endregion
+
+#region Design
+// The SHA-256 hex digest is reduced to its decimal digits and the first 12 are used (zero-padded if fewer). Each 2-digit value (0-99) is scaled by 47/100 to 0-47 and split into a part number and theme variant: 0-15 is variant A, 16-31 is B, 32-47 is C.
+#endregion
+
 namespace TimeWarp.Multiavatar;
 
 public static partial class HashService

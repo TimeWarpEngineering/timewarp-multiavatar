@@ -1,3 +1,11 @@
+#region Purpose
+// Loads the SVG part templates from the embedded svg-templates JSON resources and serves them by avatar type and part name.
+#endregion
+
+#region Design
+// The avatar type is the numeric prefix of the resource file name (e.g. "00" from 00-robo.json). The loader also accepts the svg_templates spelling in case the hyphen is converted to an underscore in resource names.
+#endregion
+
 namespace TimeWarp.Multiavatar;
 
 public static class PartTemplates

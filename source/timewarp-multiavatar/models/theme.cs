@@ -1,3 +1,7 @@
+#region Purpose
+// Model for one theme JSON resource: colour arrays per part name for each of the A, B and C theme variants.
+#endregion
+
 namespace TimeWarp.Multiavatar;
 
 public class Theme
