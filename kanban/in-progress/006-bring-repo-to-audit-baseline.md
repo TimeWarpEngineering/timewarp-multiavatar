@@ -13,7 +13,8 @@ Bring timewarp-multiavatar to the `ganda repo audit` baseline: apply `--fix`, fi
 - [x] Move `<Version>` to source/Directory.Build.props (workflow reads it there)
 - [x] Fix analyzer diagnostics in code; build the dev CLI and the library
 - [x] Re-run audit
-- [ ] analyzer-suppressions: 4 CA1812 suppressions for TimeWarp.Nuru.DevCli handlers (open, see Results)
+- [x] analyzer-suppressions: 4 CA1812 suppressions for TimeWarp.Nuru.DevCli handlers added to the baseline (Steve 2026-11-12); removal tracked in task 007, upstream fix in timewarp-nuru 573
+- [x] Version bumped to 1.0.0-beta.14 (net11.0 retarget is breaking)
 
 ## Session
 
@@ -39,3 +40,9 @@ Fixed:
 Open:
 - `analyzer-suppressions` (Error): 4 CA1812 suppressions in tools/dev-cli/endpoints/suppressions.cs for internal handlers declared in TimeWarp.Nuru.DevCli content that this repo cannot edit.
 - `ci-code-coverage` (Warning): no coverage collection; the repo has no tests yet.
+
+### 2026-11-12
+
+- CA1812 x4 for the DevCli handlers added to `.timewarp/suppression-baseline.json` on Steve's instruction. Stopgap: upstream fix is timewarp-nuru task 573, removal here is task 007.
+- Version 1.0.0-beta.13 -> 1.0.0-beta.14. `bin/dev check-version` passes.
+- `ganda repo audit`: 42 passed, only the `ci-code-coverage` warning remains (repo has no tests).
