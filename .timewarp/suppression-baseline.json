@@ -63,6 +63,9 @@
       "IL3053": 1,
       "RCS1046": 1,
       "RCS1194": 1
+    },
+    "tools/dev-cli/endpoints/suppressions.cs": {
+      "CA1812": 4
     }
   }
 }
