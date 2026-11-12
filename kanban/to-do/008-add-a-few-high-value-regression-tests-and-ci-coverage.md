@@ -65,6 +65,7 @@ Do not add a test per avatar or per theme combination.
 - [ ] Edge input tests
 - [ ] CI runs tests with coverage and uploads the artifact
 - [ ] `ganda repo audit`: `ci-code-coverage` passes
+- [ ] Boy-scout: remove the stale `LocalNuGetCache/` line from root `.gitignore` (leftover from archived task 005; the in-repo cache was removed in task 006)
 
 ## Session
 
