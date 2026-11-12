@@ -2,4 +2,7 @@
   <Folder Name="/source/">
     <Project Path="source/timewarp-multiavatar/timewarp-multiavatar.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/timewarp-multiavatar-tests/timewarp-multiavatar-tests.csproj" />
+  </Folder>
 </Solution>

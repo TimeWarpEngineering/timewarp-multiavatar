@@ -20,7 +20,6 @@ artifacts/
 *.nupkg
 *.snupkg
 .nuget/packages/
-LocalNuGetCache/
 
 # Visual Studio Code
 .vscode/
