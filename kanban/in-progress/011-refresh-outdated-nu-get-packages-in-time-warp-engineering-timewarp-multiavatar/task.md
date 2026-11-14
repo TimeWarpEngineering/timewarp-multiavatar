@@ -34,6 +34,8 @@ Acceptance criteria:
   `TimeWarp.Build.Tasks` 2.0.0 pin (the commit moved the last-meaningful-commit date past the 2.0.1-beta.1
   publish date, ending the grace); bumped it to 2.0.1-beta.1.
 - Implement oracle: implemented by implementer-claude (claude, vendor anthropic, model claude-opus-5-5, response model claude-opus-5-5), session aa4d7012-89ae-4df7-81b8-acca229897e9, max-turns 500, Done — 2026-11-14T11:10:15Z
+- Reviewer: grok session 01a1d9c0-4e31-7c53-9416-3cc801f6ae96 (2026-11-14), effort 1, roster general, round 1, disposition clean
+- Review oracle: review by reviewer-grok (grok, vendor xai, model grok-4.7, response model grok-4.7-build), session 01a1d9c0-4e31-7c53-9416-3cc801f6ae96, max-turns 80, artifacts general.md, merged.md, disposition.md — 2026-11-14T11:14:18Z
 
 ## Results
 
@@ -62,3 +64,18 @@ Smoke:
 
 Expect: build succeeds with 0 errors; 24 tests pass; audit reports "Repository passes" and
 `package-pin-currency` shows every TimeWarp pin as the latest.
+
+### Review
+
+- Round 1, effort 1, roster: general (reviewer grok).
+- Counts: bug 0 open / 0 fixed / 0 wontfix; suggestion 0 / 0 / 0; nit 0 / 0 / 0. Final open count: 0.
+- Disposition: clean. No wontfix and no escalation.
+- Paths: `review/review-framework.md`, `review/round-1/merged.md`, `review/disposition.md`.
+
+## Learnings
+
+- Misread: the implementer restatement added "Only those version strings change (no other package edits)." The task sentence "Edit Directory.Packages.props in this repo only" limits the edit to this repository. The outdated list is the wave snapshot, not a freeze on every other pin. `package-pin-currency` then required `TimeWarp.Terminal` `2.0.0-beta.2` and `TimeWarp.Build.Tasks` `2.0.1-beta.1`. The diff follows the original pins plus those two audit fixes, and `## Results` records the deviation.
+
+## Review
+
+- Round 1: Done
