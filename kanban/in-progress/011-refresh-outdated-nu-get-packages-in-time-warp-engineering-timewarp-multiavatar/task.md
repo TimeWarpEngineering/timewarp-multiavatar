@@ -30,13 +30,16 @@ Acceptance criteria:
 - Minted by ganda task wave run 20261114T054552Z-9a0f39
 - 2026-11-14 implement: bumped the four listed pins plus `TimeWarp.Terminal` 2.0.0-beta.1 -> 2.0.0-beta.2
   (the first `ganda repo audit` failed `package-pin-currency` on it; boy-scout fix). Version 1.0.0-beta.14 -> 1.0.0-beta.15.
+- 2026-11-14 implement: the first commit's post-commit attest failed `package-pin-currency` on the dev-only
+  `TimeWarp.Build.Tasks` 2.0.0 pin (the commit moved the last-meaningful-commit date past the 2.0.1-beta.1
+  publish date, ending the grace); bumped it to 2.0.1-beta.1.
 
 ## Results
 
 Changes:
 - `Directory.Packages.props`: TimeWarp.Nuru 4.0.0-beta.13, TimeWarp.Nuru.DevCli 4.0.0-beta.13,
   TimeWarp.SourceGenerators 1.0.0-beta.16, TimeWarp.Jaribu.TestingPlatform 1.0.0-beta.16,
-  TimeWarp.Terminal 2.0.0-beta.2 (audit `package-pin-currency` error fix).
+  TimeWarp.Terminal 2.0.0-beta.2 and TimeWarp.Build.Tasks 2.0.1-beta.1 (audit/attest `package-pin-currency` fixes).
 - `source/Directory.Build.props`: `<Version>` 1.0.0-beta.15.
 
 ### Gates
@@ -44,7 +47,8 @@ Changes:
 - `./bin/dev build` — passed, 0 warnings, 0 errors.
 - `./bin/dev test` — passed, 24/24 succeeded.
 - `ganda repo audit` — first run failed `package-pin-currency` (TimeWarp.Terminal 2.0.0-beta.1 behind beta.2);
-  after the bump, build and test were rerun (pass, 24/24) and the audit rerun passed (exit 0) with 2 advisory
+  post-commit attest then failed the same check on TimeWarp.Build.Tasks 2.0.0 (behind 2.0.1-beta.1). After both
+  bumps, build and test were rerun (pass, 0 warnings, 24/24) and the audit rerun passed (exit 0) with 2 advisory
   warnings left as-is: `memsearch-scaffold` (outdated .githooks) and `vscode-window-icon` (missing .vscode files),
   both non-blocking and outside this package-refresh scope.
 
