@@ -33,6 +33,7 @@ Acceptance criteria:
 - 2026-11-14 implement: the first commit's post-commit attest failed `package-pin-currency` on the dev-only
   `TimeWarp.Build.Tasks` 2.0.0 pin (the commit moved the last-meaningful-commit date past the 2.0.1-beta.1
   publish date, ending the grace); bumped it to 2.0.1-beta.1.
+- Implement oracle: implemented by implementer-claude (claude, vendor anthropic, model claude-opus-5-5, response model claude-opus-5-5), session aa4d7012-89ae-4df7-81b8-acca229897e9, max-turns 500, Done — 2026-11-14T11:10:15Z
 
 ## Results
 
