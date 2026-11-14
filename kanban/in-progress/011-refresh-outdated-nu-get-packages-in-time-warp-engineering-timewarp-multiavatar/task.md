@@ -13,6 +13,47 @@ Edit Directory.Packages.props in this repo only.
 
 Version: set <Version> in source/Directory.Build.props from 1.0.0-beta.14 to 1.0.0-beta.15 in this pull request. The prerelease suffix is -beta.N, never +beta.N. The wave releases it after merge.
 
+## Goal (implementer restatement)
+
+Bump the four outdated TimeWarp packages in the root `Directory.Packages.props`
+(Nuru and Nuru.DevCli 4.0.0-beta.12 -> beta.13, SourceGenerators 1.0.0-beta.14 -> beta.16,
+Jaribu.TestingPlatform 1.0.0-beta.15 -> beta.16) and bump the package `<Version>` in
+`source/Directory.Build.props` from 1.0.0-beta.14 to 1.0.0-beta.15.
+
+Acceptance criteria:
+- Only those version strings change (no other package edits).
+- `./bin/dev build` and `./bin/dev test` pass with the new packages.
+- `ganda repo audit` passes.
+
 ## Session
 
 - Minted by ganda task wave run 20261114T054552Z-9a0f39
+- 2026-11-14 implement: bumped the four listed pins plus `TimeWarp.Terminal` 2.0.0-beta.1 -> 2.0.0-beta.2
+  (the first `ganda repo audit` failed `package-pin-currency` on it; boy-scout fix). Version 1.0.0-beta.14 -> 1.0.0-beta.15.
+
+## Results
+
+Changes:
+- `Directory.Packages.props`: TimeWarp.Nuru 4.0.0-beta.13, TimeWarp.Nuru.DevCli 4.0.0-beta.13,
+  TimeWarp.SourceGenerators 1.0.0-beta.16, TimeWarp.Jaribu.TestingPlatform 1.0.0-beta.16,
+  TimeWarp.Terminal 2.0.0-beta.2 (audit `package-pin-currency` error fix).
+- `source/Directory.Build.props`: `<Version>` 1.0.0-beta.15.
+
+### Gates
+
+- `./bin/dev build` — passed, 0 warnings, 0 errors.
+- `./bin/dev test` — passed, 24/24 succeeded.
+- `ganda repo audit` — first run failed `package-pin-currency` (TimeWarp.Terminal 2.0.0-beta.1 behind beta.2);
+  after the bump, build and test were rerun (pass, 24/24) and the audit rerun passed (exit 0) with 2 advisory
+  warnings left as-is: `memsearch-scaffold` (outdated .githooks) and `vscode-window-icon` (missing .vscode files),
+  both non-blocking and outside this package-refresh scope.
+
+### How to validate
+
+Smoke:
+```bash
+./bin/dev build && ./bin/dev test && ganda repo audit
+```
+
+Expect: build succeeds with 0 errors; 24 tests pass; audit reports "Repository passes" and
+`package-pin-currency` shows every TimeWarp pin as the latest.
