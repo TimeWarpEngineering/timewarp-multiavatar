@@ -51,6 +51,10 @@ Acceptance:
 - [x] `ganda repo audit` clean
 - [ ] This task's pull request shows a `CI` run (record the URL in Results)
 
+## Review
+
+- Round 1: Done
+
 ## Notes
 
 
@@ -65,6 +69,8 @@ plain `ganda pr merge` (no `--allow-no-ci`).
 
 - Created: 64677b22-d705-4b25-b537-4b53732bcb92 (2026-11-16)
 - Implement oracle: implemented by implementer-claude (claude, vendor anthropic, model claude-opus-5-5, response model claude-opus-5-5), session 371cd5eb-9021-40a8-b8e6-c821d35d1272, max-turns 500, Done — 2026-11-16T18:58:44Z
+- Review oracle: grok session 01a1e5b9-f9a8-7b11-bfc6-b578c29dbd23 (2026-11-17), effort 2, roster general, round 1, disposition clean
+- Review oracle: review by reviewer-grok (grok, vendor xai, model grok-4.7, response model grok-4.7-build), session 01a1e5b9-f9a8-7b11-bfc6-b578c29dbd23, max-turns 120, artifacts general.md, merged.md, disposition.md — 2026-11-16T19:10:13Z
 
 ## Results
 
@@ -111,4 +117,11 @@ Expect:
   (Verified 2026-11-17.) A diff with a build path prints `Build path changed: <path>. Full build.`
 - This task's pull request shows a `ci` check from the `CI/CD` workflow. The URL is recorded after
   the host opens the pull request; it is not available during implement.
+
+### Review
+
+- Rounds: 1. Roster: general. Effort: 2.
+- Counts: bug 0 open / 0 fixed / 0 wontfix; suggestion 0; nit 0. Final open count: 0.
+- Disposition: clean. No wontfix and no escalation. The implementer restatement matches the original task; no misread.
+- Paths: `review/review-framework.md`, `review/round-1/general.md`, `review/round-1/merged.md`, `review/disposition.md`.
 
