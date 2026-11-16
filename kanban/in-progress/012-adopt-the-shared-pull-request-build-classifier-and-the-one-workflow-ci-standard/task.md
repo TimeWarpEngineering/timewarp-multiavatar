@@ -24,6 +24,23 @@ Survey 2026-11-16 for this repo: no `pull_request` paths filter; `dev workflow` 
 6. No local copy of the classification rule remains in `tools/dev-cli/`.
 7. `ganda repo audit` passes, including both CI-standard checks from ganda 655.
 
+## Goal (implementer restatement)
+
+Make every pull request to timewarp-multiavatar report a `CI` check, and let `dev workflow` decide
+whether that run builds, using the org's single shared rule instead of a hand copy.
+
+Acceptance:
+- `ganda repo audit --fix` runs first and its changes are committed.
+- `TimeWarp.Nuru` and `TimeWarp.Nuru.DevCli` are pinned at `4.0.0-beta.15`.
+- `dev workflow` calls `PullRequestBuildClassifier.DecideAsync(repoRoot, ct)` first; when it says skip,
+  it prints the decision message and exits 0. Push/release/local runs keep the full pipeline.
+- The local `NonBuildPaths` copy in `tools/dev-cli/endpoints/workflow-command.cs` is deleted.
+- `.github/workflows/workflow.yml` has no `paths`/`paths-ignore` on `pull_request` (any `push`
+  filter is kept with a why comment).
+- Build roots beyond the classifier defaults are declared in `.timewarp/dev.jsonc`
+  `pullRequestBuild` (readme.md is packed into the NuGet package, so it is a build path).
+- `ganda repo audit` passes, including the two CI-standard checks (ganda 655).
+
 ## Checklist
 
 - [ ] `ganda repo audit --fix` run and committed
