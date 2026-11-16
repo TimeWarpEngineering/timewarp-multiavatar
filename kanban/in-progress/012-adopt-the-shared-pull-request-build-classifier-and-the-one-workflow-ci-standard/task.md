@@ -43,12 +43,12 @@ Acceptance:
 
 ## Checklist
 
-- [ ] `ganda repo audit --fix` run and committed
-- [ ] DevCli pin at 4.0.0-beta.15
-- [ ] `dev workflow` calls the shared classifier on pull requests; skip exits 0 with its message
-- [ ] No `paths` filter on `pull_request`; `push` filter kept with a why comment
-- [ ] Extra build roots (if any) declared through config
-- [ ] `ganda repo audit` clean
+- [x] `ganda repo audit --fix` run and committed
+- [x] DevCli pin at 4.0.0-beta.15
+- [x] `dev workflow` calls the shared classifier on pull requests; skip exits 0 with its message
+- [x] No `paths` filter on `pull_request`; `push` filter kept with a why comment
+- [x] Extra build roots (if any) declared through config
+- [x] `ganda repo audit` clean
 - [ ] This task's pull request shows a `CI` run (record the URL in Results)
 
 ## Notes
@@ -59,4 +59,55 @@ plain `ganda pr merge` (no `--allow-no-ci`).
 
 ## Session
 
+- 2026-11-17 implementer (claude): `ganda repo audit --fix` added `.githooks/prepare-commit-msg{,.cs}`
+  (committed f76fb36). The audit's `package-pin-currency` check also flagged TimeWarp.Amuru /
+  Amuru.Tools 3.0.0-beta.2 (latest 3.0.0-beta.5); bumped them with the Nuru pins (boy-scout).
+
 - Created: 64677b22-d705-4b25-b537-4b53732bcb92 (2026-11-16)
+
+## Results
+
+Changes:
+- `Directory.Packages.props`: `TimeWarp.Nuru` and `TimeWarp.Nuru.DevCli` 4.0.0-beta.13 -> 4.0.0-beta.15;
+  `TimeWarp.Amuru` and `TimeWarp.Amuru.Tools` 3.0.0-beta.2 -> 3.0.0-beta.5 (pin-currency audit).
+- `tools/dev-cli/endpoints/workflow-command.cs`: `dev workflow` starts with
+  `PullRequestBuildClassifier.DecideAsync(RepoRoot, Ct)`, prints `decision.Message`, and returns
+  (exit 0) when `!decision.RequiresBuild`. The local `NonBuildPaths` rule copy and its diff/event
+  helpers are deleted. Push/release/local runs: the classifier says "Full build" and the pipeline runs.
+- `.timewarp/dev.jsonc` (new): `pullRequestBuild.buildPaths = ["readme.md", "assets/logo.png"]`,
+  both packed into the nupkg. No other build roots outside the classifier defaults.
+- `.github/workflows/workflow.yml`: `pull_request` had no `paths` filter and `push` had none to keep.
+  Added a header comment on the one-workflow standard, `fetch-depth: 0` (the classifier's three-dot
+  diff), and a pull-request step `dotnet run --file tools/dev-cli/dev.cs -- workflow`. Before this
+  change CI never called `dev workflow`, so the classifier would have had no effect in CI. Push and
+  dispatch-merge keep the dotnet restore/build/test/coverage steps. Release steps are unchanged.
+  Pull requests no longer upload the coverage artifact; push to master still does.
+
+### Gates
+
+- `./bin/dev build`: succeeded, 0 warnings, 0 errors.
+- `./bin/dev test`: Passed, 24/24.
+- `ganda repo audit`: passes all checks (44 passed, 0 failed, 3 skipped), including
+  `dev-workflow-classifier` and `workflow-file`.
+- Dev CLI recompiled with `dotnet run --file tools/dev-cli/dev.cs -- self-install` (succeeded).
+
+### How to validate
+
+Smoke:
+```bash
+./bin/dev workflow   # local run, no GITHUB_EVENT_NAME
+# Simulated kanban-only pull request (35b19f8...80f2261 changes only kanban/**):
+printf '{"pull_request":{"base":{"sha":"%s"},"head":{"sha":"%s"}}}' \
+  $(git rev-parse 35b19f8) $(git rev-parse 80f2261) > /tmp/pr.json
+GITHUB_EVENT_NAME=pull_request GITHUB_EVENT_PATH=/tmp/pr.json ./bin/dev workflow; echo $?
+```
+
+Expect:
+- Local run prints `No GITHUB_EVENT_NAME (local run). Full build.` then
+  `Pipeline: self-install -> clean -> build -> test`.
+- Simulated kanban-only pull request prints `Pull request changes only declared non-build paths.
+  Skipping build and test. ... (2 changed paths)`, then `Workflow completed successfully!`, exit 0.
+  (Verified 2026-11-17.) A diff with a build path prints `Build path changed: <path>. Full build.`
+- This task's pull request shows a `ci` check from the `CI/CD` workflow. The URL is recorded after
+  the host opens the pull request; it is not available during implement.
+

@@ -1,0 +1,14 @@
+{
+  // Additions to the shared pull request build rule (PullRequestBuildClassifier
+  // in TimeWarp.Nuru.DevCli). readme.md and assets/logo.png are packed into the
+  // TimeWarp.Multiavatar nupkg (PackageReadmeFile / PackageIcon), so a pull
+  // request that changes them must build; the default rule treats both as
+  // non-build. source/, tests/, tools/ and msbuild/ are already protected build
+  // roots. Task 012.
+  "pullRequestBuild": {
+    "buildPaths": [
+      "readme.md",
+      "assets/logo.png"
+    ]
+  }
+}
