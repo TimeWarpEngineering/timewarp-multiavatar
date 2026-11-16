@@ -1,5 +1,14 @@
 name: CI/CD
 
+# One-workflow CI standard (ganda 655): no paths / paths-ignore filter on
+# pull_request, so every pull request reports a CI check. A filtered workflow
+# never reports a status and a required check would stay pending. On a pull
+# request, dev workflow runs the shared PullRequestBuildClassifier
+# (TimeWarp.Nuru.DevCli) and skips build and test when the diff touches only
+# non-build paths (kanban, documentation, ...). Extra build paths live in
+# .timewarp/dev.jsonc under pullRequestBuild. Push, dispatch, and release keep
+# the dotnet steps below.
+
 on:
   push:
     branches: [ master ]
@@ -36,6 +45,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # The classifier diffs base...head; a shallow checkout fails the diff and builds.
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -49,25 +60,27 @@ jobs:
         echo "::error::mode=release requires confirm=release. Refusing break-glass publish."
         exit 1
 
-    # --- merge mode (push / PR / dispatch merge): build + test ---
+    # --- pull request: dev workflow decides in C# whether build and test run ---
+    - name: Run CI pipeline (pull request)
+      if: github.event_name == 'pull_request'
+      run: dotnet run --file tools/dev-cli/dev.cs -- workflow
+
+    # --- merge mode (push / dispatch merge): build + test + coverage ---
     - name: Restore dependencies (CI)
       if: >-
         github.event_name == 'push' ||
-        github.event_name == 'pull_request' ||
         (github.event_name == 'workflow_dispatch' && inputs.mode == 'merge')
       run: dotnet restore
 
     - name: Build (CI)
       if: >-
         github.event_name == 'push' ||
-        github.event_name == 'pull_request' ||
         (github.event_name == 'workflow_dispatch' && inputs.mode == 'merge')
       run: dotnet build --no-restore --configuration Release
 
     - name: Test
       if: >-
         github.event_name == 'push' ||
-        github.event_name == 'pull_request' ||
         (github.event_name == 'workflow_dispatch' && inputs.mode == 'merge')
       run: dotnet test --no-build --configuration Release --results-directory artifacts/coverage --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml
 
@@ -75,7 +88,6 @@ jobs:
       if: >-
         success() && (
         github.event_name == 'push' ||
-        github.event_name == 'pull_request' ||
         (github.event_name == 'workflow_dispatch' && inputs.mode == 'merge'))
       uses: actions/upload-artifact@v4
       with:
