@@ -50,6 +50,12 @@ Acceptance:
   4.0.0-beta.14+, and this repo already pins 4.0.0-beta.15. Deleted the suppression file and its
   baseline entry; dev CLI re-published and all gates pass.
 - Implement oracle: implemented by implementer-claude (claude, vendor anthropic, model claude-opus-5-5, response model claude-opus-5-5), session f3de8c53-7b2f-41ad-8d6b-bbedf7b6f07d, max-turns 500, Done — 2026-11-17T10:42:23Z
+- Review oracle: grok (vendor xai), session 01a1e919-e7ed-7540-bc00-a6f114cab862, effort 1, roster general, round 1, disposition clean — 2026-11-17
+- Review oracle: review by reviewer-grok (grok, vendor xai, model grok-4.7, response model grok-4.7-build), session 01a1e919-e7ed-7540-bc00-a6f114cab862, max-turns 80, artifacts general.md, merged.md, disposition.md — 2026-11-17T10:50:23Z
+
+## Review
+
+- Round 1: Done
 
 ## Notes
 
@@ -98,3 +104,7 @@ Expect: "suppressions file gone"; the baseline grep prints `0`; the CA1812 grep 
 self-install publishes the dev CLI with no CA1812 error; the build ends with `0 Warning(s)` /
 `0 Error(s)`; and the audit exits 0 with `analyzer-suppressions` passing. A local
 `vscode-window-icon` warning can show up in a worktree that has no `.vscode/`.
+
+### Review
+
+Round 1, effort 1, reviewer roster: general. Counts: bug 0 open / 0 fixed / 0 wontfix, suggestion 0, nit 0. Final open count 0. Disposition: clean. The implementer restatement matches the original task, so there is no misread under Learnings. Paths: `review/review-framework.md`, `review/round-1/general.md`, `review/round-1/merged.md`, `review/disposition.md`.
