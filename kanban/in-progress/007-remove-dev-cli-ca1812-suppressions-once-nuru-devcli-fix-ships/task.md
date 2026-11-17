@@ -49,6 +49,7 @@ Acceptance:
 - 2026-11-17 implement oracle (ganda task work, implementer-claude): Nuru 573 is in DevCli
   4.0.0-beta.14+, and this repo already pins 4.0.0-beta.15. Deleted the suppression file and its
   baseline entry; dev CLI re-published and all gates pass.
+- Implement oracle: implemented by implementer-claude (claude, vendor anthropic, model claude-opus-5-5, response model claude-opus-5-5), session f3de8c53-7b2f-41ad-8d6b-bbedf7b6f07d, max-turns 500, Done — 2026-11-17T10:42:23Z
 
 ## Notes
 
