@@ -33,6 +33,7 @@ Acceptance criteria:
   `Shell.Builder("dotnet")` with `run` in `tools/dev-cli/endpoints/workflow-command.cs`.
   Replaced it with `DotNet.Run().WithFile("tools/dev-cli/dev.cs").WithArguments("self-install")`,
   the same form timewarp-build-tasks uses.
+- Implement oracle: implemented by implementer-claude (claude, vendor anthropic, model claude-opus-5-5), session not reported, max-turns 500, Done — 2026-11-18T20:32:34Z
 
 ## Results
 
