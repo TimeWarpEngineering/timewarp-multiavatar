@@ -34,6 +34,8 @@ Acceptance criteria:
   Replaced it with `DotNet.Run().WithFile("tools/dev-cli/dev.cs").WithArguments("self-install")`,
   the same form timewarp-build-tasks uses.
 - Implement oracle: implemented by implementer-claude (claude, vendor anthropic, model claude-opus-5-5), session not reported, max-turns 500, Done — 2026-11-18T20:32:34Z
+- Review oracle: general, effort 1, Grok session `01a1f05c-986b-7e21-89ab-d78a004c937c`, turn cap 80, disposition clean — 2026-11-19
+- Review oracle: review by reviewer-grok (grok, vendor xai, model grok-4.7, response model grok-4.7-build), session 01a1f05c-986b-7e21-89ab-d78a004c937c, max-turns 80, artifacts general.md, merged.md, disposition.md — 2026-11-18T20:39:28Z
 
 ## Results
 
@@ -62,3 +64,18 @@ dotnet run --file tools/dev-cli/dev.cs -- self-install
 ```
 Expect: self-install succeeds with no AMURU0001 error, build reports 0 errors, and the test
 suite passes on Jaribu.TestingPlatform 1.0.0-beta.18.
+
+### Review
+
+- Round 1, effort 1, roster: general (Grok session `01a1f05c-986b-7e21-89ab-d78a004c937c`, 2026-11-19).
+- Counts: bug 0 open / 0 fixed / 0 wontfix; suggestion 0; nit 0. Final open count: 0.
+- Disposition: clean. No wontfix and no escalation.
+- Paths: `review/review-framework.md`, `review/round-1/general.md`, `review/round-1/merged.md`, `review/disposition.md`.
+
+## Learnings
+
+- Misread: the original task says to edit `Directory.Packages.props` in this repo only, and to leave `<Version>` in `source/Directory.Build.props` unchanged. The implementer restatement keeps the six pin bumps and the version constraint, drops the only-that-file sentence, and adds acceptance that self-install, `./bin/dev build`, and `ganda repo audit` pass. The implementation then edited `tools/dev-cli/endpoints/workflow-command.cs` because Amuru 3.0.0-beta.10 analyzer AMURU0001 rejects `Shell.Builder("dotnet")` with `run`. The replacement `DotNet.Run().WithFile("tools/dev-cli/dev.cs").WithArguments("self-install")` builds the same `dotnet run --file tools/dev-cli/dev.cs -- self-install` command (TimeWarp.Amuru.Tools 3.0.0-beta.10 `DotNetRunBuilder.Build`). Review left that edit in place.
+
+## Review
+
+- Round 1: Done
