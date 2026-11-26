@@ -1,7 +1,9 @@
+// #region Purpose
 // Regenerates the reference SVGs in this folder from the upstream JavaScript generator.
 // See readme.md in this folder for the exact steps and upstream version.
 //
 // usage: node generate-references.cjs <path-to-upstream dist/commonjs/index.js> <output-dir>
+// #endregion
 const fs = require('fs');
 const path = require('path');
 
